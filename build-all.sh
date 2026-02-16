@@ -3,12 +3,16 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DRY_RUN=false
+PUSH=false
+REGISTRY=""
 CONFIG_FILE=""
 
-for arg in "$@"; do
-    case "${arg}" in
-        --dry-run) DRY_RUN=true ;;
-        *)         CONFIG_FILE="${arg}" ;;
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --dry-run)   DRY_RUN=true;    shift ;;
+        --push)      PUSH=true;       shift ;;
+        --registry)  REGISTRY="$2";   shift 2 ;;
+        *)           CONFIG_FILE="$1"; shift ;;
     esac
 done
 
@@ -22,6 +26,11 @@ fi
 
 if [[ ! -f "${CONFIG_FILE}" ]]; then
     echo "Error: config file not found: ${CONFIG_FILE}" >&2
+    exit 1
+fi
+
+if [[ "${PUSH}" == true && -z "${REGISTRY}" ]]; then
+    echo "Error: --registry is required when using --push" >&2
     exit 1
 fi
 
@@ -46,6 +55,14 @@ for ((i = 0; i < NUM_BUILDS; i++)); do
 
     if [[ "${DRY_RUN}" == true ]]; then
         FLAGS+=("--dry-run")
+    fi
+
+    if [[ "${PUSH}" == true ]]; then
+        FLAGS+=("--push")
+    fi
+
+    if [[ -n "${REGISTRY}" ]]; then
+        FLAGS+=("--registry" "${REGISTRY}")
     fi
 
     echo "=== Build $((i + 1))/${NUM_BUILDS}: ${IMAGE} ${FLAGS[*]:-} ==="
