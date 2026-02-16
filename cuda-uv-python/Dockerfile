@@ -1,6 +1,8 @@
 ARG CUDA_VERSION=12.8.1
 ARG CUDA_IMAGE_VARIANT=devel
+ARG UV_VERSION=0.10.2
 ARG UBUNTU_VERSION=24.04
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
 FROM nvidia/cuda:${CUDA_VERSION}-${CUDA_IMAGE_VARIANT}-ubuntu${UBUNTU_VERSION}
 
 # Install additional OS dependencies
@@ -28,8 +30,7 @@ RUN rm -rf /var/lib/apt/lists/*
 # - UV_TOOL_BIN_DIR ensures that uv installed tools are avaiable
 # - UV_MANAGED_PYTHON instructs uv to ignore system python installation
 # - UV_CACHE_DIR explicitly names a cache dir that can be shared across container runs via a bind mount
-ARG UV_VERSION=0.10.2
-COPY --from=ghcr.io/astral-sh/uv:${UV_VERSION} /uv /uvx /bin/
+COPY --from=uv /uv /uvx /bin/
 ENV UV_TOOL_BIN_DIR=/usr/local/bin
 ENV UV_MANAGED_PYTHON=1
 ENV UV_CACHE_DIR=/cache/uv
