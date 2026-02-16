@@ -1,4 +1,24 @@
 builds:
+  - image: cuda-uv-python
+    cuda-version: "12.8.1"
+    cuda-image-variant: devel
+    uv-version: "0.10.2"
+
+  - image: cuda-uv-python
+    cuda-version: "12.8.1"
+    cuda-image-variant: cudnn-devel
+    uv-version: "0.10.2"
+
+  - image: cuda-uv-python
+    cuda-version: "13.1.1"
+    cuda-image-variant: devel
+    uv-version: "0.10.2"
+
+  - image: cuda-uv-python
+    cuda-version: "13.1.1"
+    cuda-image-variant: cudnn-devel
+    uv-version: "0.10.2"
+  
   - image: cuda-samples
     cuda-version: "12.8.1"
     samples-version: "12.8"
@@ -6,23 +26,3 @@ builds:
   - image: cuda-samples
     cuda-version: "13.1.1"
     samples-version: "13.1"
-
-  - image: cuda-uv-python
-    cuda-version: "12.8.1"
-    cuda-image-variant: devel
-    uv-version: "0.10.2"
-
-  - image: cuda-uv-python
-    cuda-version: "12.8.1"
-    cuda-image-variant: cudnn-devel
-    uv-version: "0.10.2"
-
-  - image: cuda-uv-python
-    cuda-version: "13.1.1"
-    cuda-image-variant: devel
-    uv-version: "0.10.2"
-
-  - image: cuda-uv-python
-    cuda-version: "13.1.1"
-    cuda-image-variant: cudnn-devel
-    uv-version: "0.10.2"
